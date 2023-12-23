@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/Stan370/Test-blog/db"
 )
 
 func main() {
-	db := InitDatabase()
+	dbObject := db.InitDatabase()
 
 	// 创建一个路由并将处理器函数与路径关联
 	http.HandleFunc("/api", corsHandler)

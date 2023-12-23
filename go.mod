@@ -12,4 +12,3 @@ require (
 	gorm.io/gorm v1.25.5
 )
 
-replace github.com/Stan370/Test-blog v1.0.0 => D:/Work/Test-blog
