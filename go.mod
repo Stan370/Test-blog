@@ -1,9 +1,9 @@
-module Test-blog
+module github.com/Stan370/Test-blog
 
 go 1.19
 
 require (
-	github.com/Stan370/Test-blog v1.0.0
+	github.com/Stan370/Test-blog v1.0.1
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
