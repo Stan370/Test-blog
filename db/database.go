@@ -1,6 +1,8 @@
 package db
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"time"
 
@@ -26,6 +28,10 @@ type Post struct {
 }
 
 func CreatePost(db *gorm.DB, title, content string, authorID uint) error {
+	if title == "" || content == "" {
+		return errors.New("title and content cannot be empty")
+	}
+
 	post := Post{
 		Title:     title,
 		Content:   content,
@@ -33,15 +39,27 @@ func CreatePost(db *gorm.DB, title, content string, authorID uint) error {
 		CreatedAt: time.Now(),
 	}
 
-	return db.Clauses(clause.OnConflict{DoNothing: true}).Create(&post).Error
+	// Attempt to create the post
+	result := db.Clauses(clause.OnConflict{DoNothing: true}).Create(&post)
+	if result.Error != nil {
+		return fmt.Errorf("failed to create post: %w", result.Error)
+	}
+
+	// Check the number of rows affected after creating the post
+	if result.RowsAffected == 0 {
+		return errors.New("post already exists or no changes were made")
+	}
+
+	return result.Error
 }
 
 func InitDatabase() *gorm.DB {
 	var users = User{ID: 1000, Username: "Jiaming", Email: "kjmcs2048@gmail.com"}
 
 	db, err := gorm.Open(mysql.Open("blog.db"), &gorm.Config{})
+
 	if err != nil {
-		log.Panicln("Fail to connect database")
+		log.Fatalln("Fail to connect database, please check config")
 		return nil
 	}
 

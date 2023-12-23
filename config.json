@@ -1,0 +1,6 @@
+{
+    "db_name": "Blog",
+    "db_endpoint": "127.0.0.1:3306",
+    "username": "root",
+    "password": "public"
+}

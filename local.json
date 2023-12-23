@@ -1,6 +1,0 @@
-{
-    "db_name": "Blog",
-    "db_main_endpoint": "127.0.0.1:3306",
-    "db_username": "root",
-    "admin_default_password": "public"
-}
