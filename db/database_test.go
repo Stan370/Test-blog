@@ -12,7 +12,6 @@ func TestCreatePost(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to open database: %v", err)
 	}
-	defer db.Close()
 
 	// Migrate the models to create necessary tables
 	if err := db.AutoMigrate(&User{}, &Post{}); err != nil {
