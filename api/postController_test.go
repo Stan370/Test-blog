@@ -29,12 +29,18 @@ func setupTest() (*gin.Engine, *gorm.DB) {
 	return router, db
 }
 
+type Post struct {
+	PostID    string `gorm:"unique;not null"`
+	Title     string `gorm:"type:text;not null"`
+	Content   string `gorm:"type:text;not null"`
+	AuthorID  uint   //Foreign key
+}
+
 func TestGetAllPosts(t *testing.T) {
 	router, db := setupTest()
-	defer db.Migrator().DropTable(&api.Post{})
-	defer db.Close()
+	defer db.Migrator().DropTable(&Post{})
 
-	db.Create(&api.Post{Title: "Test Title", Content: "Test Content"})
+	db.Create(&Post{Title: "Test Title", Content: "Test Content"})
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/posts", nil)
@@ -42,7 +48,7 @@ func TestGetAllPosts(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	var posts []api.Post
+	var posts []Post
 	json.Unmarshal(w.Body.Bytes(), &posts)
 
 	assert.Equal(t, 1, len(posts))
@@ -50,10 +56,9 @@ func TestGetAllPosts(t *testing.T) {
 
 func TestGetPostByID(t *testing.T) {
 	router, db := setupTest()
-	defer db.Migrator().DropTable(&api.Post{})
-	defer db.Close()
+	defer db.Migrator().DropTable(&Post{})
 
-	db.Create(&api.Post{PostID: "1", Title: "Test Title", Content: "Test Content"})
+	db.Create(&Post{PostID: "1", Title: "Test Title", Content: "Test Content"})
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/posts/1", nil)
@@ -61,7 +66,7 @@ func TestGetPostByID(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	var post api.Post
+	var post Post
 	json.Unmarshal(w.Body.Bytes(), &post)
 
 	assert.Equal(t, "Test Title", post.Title)
@@ -69,10 +74,9 @@ func TestGetPostByID(t *testing.T) {
 
 func TestCreatePost(t *testing.T) {
 	router, db := setupTest()
-	defer db.Migrator().DropTable(&api.Post{})
-	defer db.Close()
+	defer db.Migrator().DropTable(&Post{})
 
-	newPost := api.Post{Title: "New Title", Content: "New Content"}
+	newPost := Post{Title: "New Title", Content: "New Content"}
 	payload, _ := json.Marshal(newPost)
 
 	w := httptest.NewRecorder()
@@ -82,7 +86,7 @@ func TestCreatePost(t *testing.T) {
 
 	assert.Equal(t, http.StatusCreated, w.Code)
 
-	var createdPost api.Post
+	var createdPost Post
 	json.Unmarshal(w.Body.Bytes(), &createdPost)
 
 	assert.Equal(t, "New Title", createdPost.Title)
