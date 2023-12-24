@@ -6,8 +6,6 @@ A simple RESTful blog backend system.
 
 You can use GitHub Codespaces for online development:
 
-[![][codespaces-shield]][codespaces-link]
-
 Or clone it for local development:
 
 ```fish
