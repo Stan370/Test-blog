@@ -9,6 +9,7 @@ import (
 )
 
 func TestCreatePost(t *testing.T) {
+	// 创建内存 SQLite 数据库进行测试
 	db, err := gorm.Open(mysql.Open("file::memory:?cache=shared"), &gorm.Config{})
 	if err != nil {
 		t.Fatalf("Failed to open database: %v", err)

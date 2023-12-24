@@ -55,20 +55,28 @@ func CreatePost(db *gorm.DB, PostID, title, content string, authorID uint) error
 }
 
 func InitDatabase(config *config.Config) *gorm.DB {
-	var users = User{ID: 1000, Username: "Jiaming", Email: "kjmcs2048@gmail.com"}
-
 	dsn := config.GetDbConnection()
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
+	db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{})
 	if err != nil {
 		log.Fatalln("Fail to connect database, please check config")
 		return nil
 	}
 
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Config connection pool
+	sqlDB.SetConnMaxLifetime(10)
+	sqlDB.SetMaxIdleConns(5)
+	sqlDB.SetMaxOpenConns(10)
+
 	err = CreatePost(db, "1", "New Title", "This is a new post content.", 1000)
 	if err != nil {
 		log.Panicln("Failed to create post: " + err.Error())
 	}
+
+	var users = User{ID: 1000, Username: "Jiaming", Email: "kjmcs2048@gmail.com"}
 
 	// AutoMigrate will create the tables based on the models if they don't exist
 	if err := db.AutoMigrate(&users, &Post{}); err != nil {
