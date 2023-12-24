@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/Stan370/Test-blog/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -20,14 +21,14 @@ type User struct {
 }
 
 type Post struct {
-	PostID    uint   `gorm:"unique;not null"`
+	PostID    string `gorm:"unique;not null"`
 	Title     string `gorm:"type:text;not null"`
 	Content   string `gorm:"type:text;not null"`
 	AuthorID  uint   //Foreign key
 	CreatedAt time.Time
 }
 
-func CreatePost(db *gorm.DB, title, content string, authorID uint) error {
+func CreatePost(db *gorm.DB, PostID, title, content string, authorID uint) error {
 	if title == "" || content == "" {
 		return errors.New("title and content cannot be empty")
 	}
@@ -53,17 +54,18 @@ func CreatePost(db *gorm.DB, title, content string, authorID uint) error {
 	return result.Error
 }
 
-func InitDatabase() *gorm.DB {
+func InitDatabase(config *config.Config) *gorm.DB {
 	var users = User{ID: 1000, Username: "Jiaming", Email: "kjmcs2048@gmail.com"}
 
-	db, err := gorm.Open(mysql.Open("blog.db"), &gorm.Config{})
+	dsn := config.GetDbConnection()
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalln("Fail to connect database, please check config")
 		return nil
 	}
 
-	err = CreatePost(db, "New Title", "This is a new post content.", 1000)
+	err = CreatePost(db, "1", "New Title", "This is a new post content.", 1000)
 	if err != nil {
 		log.Panicln("Failed to create post: " + err.Error())
 	}

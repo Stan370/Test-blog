@@ -3,6 +3,7 @@ package db
 import (
 	"testing"
 
+	"github.com/google/uuid"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -19,20 +20,20 @@ func TestCreatePost(t *testing.T) {
 	}
 
 	// Test case: Valid post creation
-	err = CreatePost(db, "New Title", "This is a new post content.", 1000)
+	err = CreatePost(db, uuid.New().String(), "New Title", "This is a new post content.", 1000)
 	if err != nil {
 		t.Errorf("Failed to create post: %v", err)
 	}
 
 	// Test case: Empty title and content
-	err = CreatePost(db, "", "", 1000)
+	err = CreatePost(db, uuid.New().String(), "", "", 1000)
 	if err == nil {
 		t.Error("Expected error for empty title and content, but got nil")
 	}
 
 	// Test case: Post already exists
 	// Creating the same post again should return an error
-	err = CreatePost(db, "New Title", "This is a new post content.", 1000)
+	err = CreatePost(db, uuid.New().String(), "New Title", "This is a new post content.", 1000)
 	if err == nil {
 		t.Error("Expected error for existing post, but got nil")
 	}

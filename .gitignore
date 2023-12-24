@@ -1,6 +1,6 @@
 # Test binary, built with `go test -c`
 *.test
-
+*.exe
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
