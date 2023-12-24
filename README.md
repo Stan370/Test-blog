@@ -16,4 +16,4 @@ When you have problem get packets from dependency, please check your GOPROXY.
 ```
 #### Start 'blog' service
 
-- `./run.sh` in Linux env
+- `./run.sh`         in Linux env
