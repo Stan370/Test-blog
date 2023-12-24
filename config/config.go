@@ -16,10 +16,10 @@ type Config struct {
 }
 
 func (c *Config) GetDbConnection() string {
-	return c.Username + ":" + c.Password + "@tcp(" + c.Endpoint + ")/" + c.DbName + "?parseTime=true"
+	return c.Username + ":" + c.Password + "@tcp(" + c.Endpoint + ")/" + c.DbName + "?parseTime=true&loc=Local"
 }
 
-func loadConfig() (*Config, error) {
+func LoadConfig() (*Config, error) {
 	config := &Config{}
 	data, err := ioutil.ReadFile("config.json")
 	if err != nil {

@@ -5,13 +5,14 @@ import (
 	"net/http"
 
 	"github.com/Stan370/Test-blog/api"
+	"github.com/Stan370/Test-blog/config"
 	"github.com/Stan370/Test-blog/db"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
-	conf, err := config.loadConfig()
+	conf, err := config.LoadConfig()
 	if err != nil {
 		log.Fatalln("Failed to load config: " + err.Error())
 	}
@@ -32,7 +33,7 @@ func main() {
 		v1.POST("/posts", postCtrl.CreatePost)
 		// v1.PUT("/posts/:id", postCtrl.UpdatePost)
 		// v1.DELETE("/posts/:id", postCtrl.DeletePost)
-		//v1.GET("/healthcheck", healthCheckHandler)
+		// v1.GET("/healthcheck", healthCheckHandler)
 	}
 
 	r.Run(":8080")
