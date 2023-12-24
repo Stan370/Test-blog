@@ -6,10 +6,8 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	gorm.io/driver/mysql v1.5.2
 	gorm.io/gorm v1.25.5
-	github.com/Stan370/Test-blog v1.1.2
 )
 
-replace github.com/Stan370/Test-blog v1.1.2 => ../Test-blog
 
 require (
 	github.com/bytedance/sonic v1.9.1 // indirect
