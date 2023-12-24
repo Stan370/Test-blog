@@ -1,31 +1,31 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/Stan370/Test-blog/db"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 type postController struct {
 	Dbconn *gorm.DB
 }
 
-func getAllPosts(c *gin.Context) {
+func (controller *postController) getAllPosts(c *gin.Context) {
 	var Post db.Post
-	if err := r.Dbconn.Find(&Post).Error; err != nil {
+	if err := controller.Dbconn.Find(&Post).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, Post)
 	return
-
 }
 
-func getPostByID(c *gin.Context) {
+func (controller *postController) getPostByID(c *gin.Context) {
 	id := c.Param("id")
 	var post db.Post
-	if err := r.Dbconn.Where("post_id = ?", id).First(&post).Error; err != nil {
+	if err := controller.Dbconn.Where("post_id = ?", id).First(&post).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Post not found"})
 		return
 	}
@@ -33,7 +33,7 @@ func getPostByID(c *gin.Context) {
 	return
 }
 
-func createPost(c *gin.Context) {
+func (controller *postController) createPost(c *gin.Context) {
 	var newPost db.Post
 	if err := c.BindJSON(&newPost); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
