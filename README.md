@@ -24,7 +24,7 @@ When you have problem get packets from dependency, please check your GOPROXY.
 
     - For Apple Silicon chips: `docker pull --platform linux/amd64 mysql:5.7`
 
-- `docker run --name Blog -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=public mysql:5.7`
+- `docker run --name Blog -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=public -e MYSQL_DATABASE=blog mysql:5.7`
 ```
 #### Start 'blog' service
 

@@ -12,19 +12,20 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+// User DAO logic not write yet
 type User struct {
-	ID       int `gorm:"unique;not null"`
+	ID       uint `gorm:"unique;not null" json:"id,omitempty"`
 	Username string
 	Email    string
 	Password string
-	Posts    []Post `gorm:"ForeignKey:PostID"`
 }
 
 type Post struct {
-	PostID    string `gorm:"unique;not null"`
+	PostID    string `gorm:"primaryKey;not null"`
 	Title     string `gorm:"type:text;not null"`
 	Content   string `gorm:"type:text;not null"`
-	AuthorID  uint   //Foreign key
+	AuthorID  uint   `json:"-"` //Foreign key
+	User      User   `gorm:"-" json:"postid,omitempty"`
 	CreatedAt time.Time
 }
 
@@ -34,6 +35,7 @@ func CreatePost(db *gorm.DB, PostID, title, content string, authorID uint) error
 	}
 
 	post := Post{
+		PostID:    PostID,
 		Title:     title,
 		Content:   content,
 		AuthorID:  authorID,
@@ -56,7 +58,9 @@ func CreatePost(db *gorm.DB, PostID, title, content string, authorID uint) error
 
 func InitDatabase(config *config.Config) *gorm.DB {
 	dsn := config.GetDbConnection()
-	db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{})
+	db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		log.Fatalln("Fail to connect database, please check config")
 		return nil
@@ -71,17 +75,17 @@ func InitDatabase(config *config.Config) *gorm.DB {
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetMaxOpenConns(10)
 
+	// var users = User{ID: 1000, Username: "Jiaming", Email: "kjmcs2048@gmail.com", Posts: []Post{post}}
+	// AutoMigrate will create the tables based on the models if they don't exist
+	if err := db.AutoMigrate(&User{}, &Post{}); err != nil {
+		log.Panicln("Error auto migrating models: " + err.Error())
+		return nil
+	}
+
+	//var post = Post{PostID: uuid.New().String(), Title: "New Title", Content: "This is a new post content.", AuthorID: 1000}
 	err = CreatePost(db, "1", "New Title", "This is a new post content.", 1000)
 	if err != nil {
 		log.Panicln("Failed to create post: " + err.Error())
-	}
-
-	var users = User{ID: 1000, Username: "Jiaming", Email: "kjmcs2048@gmail.com"}
-
-	// AutoMigrate will create the tables based on the models if they don't exist
-	if err := db.AutoMigrate(&users, &Post{}); err != nil {
-		log.Panicln("Error auto migrating models: " + err.Error())
-		return nil
 	}
 
 	return db
