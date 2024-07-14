@@ -3,8 +3,8 @@ This repository contains a solution to the test task for a backend developer pos
 
 # Getting Started
 
-**To run the application, follow these steps:
-**
+To run the application, follow these steps:
+
 Clone the repository to your local machine.
 Install the required dependencies using pip install -r requirements.txt (assuming you're using Python).
 Set up the database structure using the provided database schema (e.g., MySQL, PostgreSQL, MongoDB).
