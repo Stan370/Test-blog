@@ -75,7 +75,7 @@ func InitDatabase(config *config.Config) *gorm.DB {
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetMaxOpenConns(10)
 
-	// var users = User{ID: 1000, Username: "Jiaming", Email: "kjmcs2048@gmail.com", Posts: []Post{post}}
+	// var users = User{ID: 1000, Username: "john", Email: "Johndoe@gmail.com", Posts: []Post{post}}
 	// AutoMigrate will create the tables based on the models if they don't exist
 	if err := db.AutoMigrate(&User{}, &Post{}); err != nil {
 		log.Panicln("Error auto migrating models: " + err.Error())
