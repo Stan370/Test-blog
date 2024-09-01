@@ -43,6 +43,8 @@ When you have problem get packets from dependency, please check your GOPROXY.
 GET /posts: Retrieves a list of all blog posts.
 POST /posts: Creates a new blog post.
 GET /posts/{id}: Retrieves a blog post with given ID.
+```
+
 **Database Structure
 **
 The database structure is designed to store blog post data with the following columns:
