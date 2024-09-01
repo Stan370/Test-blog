@@ -45,23 +45,22 @@ POST /posts: Creates a new blog post.
 GET /posts/{id}: Retrieves a blog post with given ID.
 ```
 
-**Database Structure
-**
+### Database
 The database structure is designed to store blog post data with the following columns:
 
 id (primary key): Unique identifier for each blog post.
+
 title: Title of the blog post.
+
 content: Content of the blog post.
+
 created_date: Date and time when the blog post was created.
 
 The API is documented using OpenAPI (formerly known as Swagger). The API documentation includes details about the endpoints, request and response formats, and any required headers or query parameters.
 A Makefile to run and build the application.
 API tests to ensure the API is working as expected.
-An additional endpoint /healthcheck to check the state of the application and related services (currently, the database).
-Technology Stack
 
-[Database of choice] (e.g., MySQL, PostgreSQL, MongoDB)
-OpenAPI (for API documentation)
+An additional endpoint /healthcheck to check the state of the application and related services (currently, the database).
 
 
 Contributions are welcome! If you find any issues or have suggestions for improvement, please open an issue or submit a pull request.
